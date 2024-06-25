@@ -1,17 +1,14 @@
 {% comment %}
- 
-Code created by JadePuma
-Instructions - https://jadepuma.com/blogs/shopify-tutorials/add-a-cart-message-section-to-the-flex-theme
-Last editted - 26Jan24
- 
+
+  Code created by JadePuma
+  Last editted - 6/24/24
 {% endcomment %}
 
 <script
   type="application/json"
   data-section-type="cart-message"
   data-section-id="{{ section.id }}"
->
-</script>
+></script>
 
 {% comment %} Advanced {% endcomment %}
 {%- assign css_class = section.settings.css_class -%}
@@ -19,55 +16,69 @@ Last editted - 26Jan24
 
 {% comment %} Section specific CSS {% endcomment %}
 {% style %}
+    #shopify-section-{{ section.id }} {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+      padding-left: {{ section.settings.padding_left }}px;
+      padding-right: {{ section.settings.padding_right }}px;
+      {% if section.settings.width == 'half' %}
+        width: 50%;
+      {% endif %}
+    }
 
-  #shopify-section-{{ section.id }} {
-    padding-top: {{ section.settings.padding_top }}px;
-    padding-bottom: {{ section.settings.padding_bottom }}px;
-    padding-left: {{ section.settings.padding_left }}px;
-    padding-right: {{ section.settings.padding_right }}px;
-    {% if section.settings.width == 'half' %}
-      width: 50%;
-    {% endif %}
+    {%
+      render 'css-loop',
+      css: custom_css,
+      id: id
+    %}
+
+  .cart-message {
+    padding: 20px;
+    text-align: center;
+    margin: 0 auto;
+    max-width: {{ section.settings.max_width }}px;
+    border: {{ section.settings.border-thickness }}px {{ section.settings.border-type }} {{ section.settings.cart-border }};
+    border-radius: {{ section.settings.border-radius }}px;
+    background-color: {{ section.settings.cart-background }};
+
   }
 
-  {%
-    render 'css-loop',
-    css: custom_css,
-    id: id
-  %}
+    .cart-message p, .cart-message h2, .cart-message h3{
+    color:{{section.settings.body-color}};
 
-.cart-message {
-  padding: 20px;
-  text-align: center;
-  margin: 0 auto;
-  max-width: {{ section.settings.max_width }}px;
-  border: 1px solid {{ section.settings.cart-border }};
-  border-radius: 8px;
-  background-color: {{ section.settings.cart-background }};
-}
+    }
 
-@media (max-width: 768px) {
-  .cart-message {
-  width: 90%;
-  }  
-}
-
+  @media (max-width: 768px) {
+    .cart-message {
+    width: 90%;
+    }
+  }
 {% endstyle %}
 
-<section class="section {{ css_class }}
-                is-width-{{ section.settings.width }}">
-  <div class="container">
-    <div class="one-whole column content">
+{% if section.settings['cart-message-title'] != blank or section.settings['cart-message-text'] != blank %}
+  <section
+    class="
+      section {{ css_class }}
+      is-width-{{ section.settings.width }}
+    "
+  >
+    <div class="container">
+      <div class="one-whole column content">
+        <div class="cart-message">
+          {% if section.settings['font-size'] == 'h2' %}
+            <h2>{{ section.settings['cart-message-title'] }}</h2>
 
-<div class="cart-message">
-  <h3>{{ section.settings.cart-message-title }}</h3>
-      {{ section.settings.cart-message-text }}
-</div>
+          {% else %}
+            <h3>{{ section.settings['cart-message-title'] }}</h3>
+          {% endif %}
 
-          </div>
+          {{ section.settings['cart-message-text'] }}
         </div>
-        </section>
-      
+      </div>
+    </div>
+  </section>
+{% endif %}
+
 {% schema %}
 {
   "name": "JP Cart message",
@@ -75,21 +86,123 @@ Last editted - 26Jan24
   "settings": [
       {
         "type": "header",
-        "content": "Promotion Layout"
+        "content": "Message Settings"
       },
       {
-        "type": "color",
-        "id": "cart-background",
-        "label": "Background Color",
-        "default": "#ffffff"
+        "type": "text",
+        "id": "cart-message-title",
+        "label": "Title"
       },
+            {
+          "type": "select",
+          "id": "font-size",
+          "label": "Title Font Size",
+          "default": "h2",
+          "options": [
+            {
+              "value": "h2",
+              "label": "H2"
+            },
+            {
+              "value": "h3",
+              "label": "H3"
+            }
+          ]
+        },
       {
-        "type": "color",
-        "id": "cart-border",
-        "label": "Border Color",
-        "default": "#ffffff"
+        "type": "richtext",
+        "id": "cart-message-text",
+        "label": "text",
+        "default": "<p><\/p>"
       },
+            {
+          "type": "color",
+          "id": "body-color",
+          "label": "Text Color"
+        },
+        {
+          "type": "color",
+          "id": "cart-background",
+          "label": "Background Color"
+        },
+    {
+          "type": "header",
+          "content": "Border"
+        },
+        {
+          "type": "select",
+          "id": "border-type",
+          "label": "Border Type",
+          "default": "solid",
+          "options": [
+            {
+              "value": "solid",
+              "label": "Solid"
+            },
+            {
+              "value": "dotted",
+              "label": "Dotted"
+            },
+            {
+              "value": "dashed",
+              "label": "Dashed"
+            },
+            {
+              "value": "inset",
+              "label": "Inset"
+            },
+            {
+              "value": "outset",
+              "label": "Outset"
+            },
+            {
+              "value": "double",
+              "label": "Double"
+            },
+            {
+              "value": "groove",
+              "label": "Groove"
+            },
+            {
+              "value": "ridge",
+              "label": "Ridge"
+            },
+            {
+              "value": "none",
+              "label": "None"
+            }
+          ]
+        },
+        {
+          "type": "color",
+          "id": "cart-border",
+          "label": "Border Color"
+        },
+        {
+          "type": "range",
+          "id": "border-thickness",
+          "label": "Border Thickness",
+          "min": 0,
+          "max": 8,
+          "step": 1,
+          "default": 1,
+          "unit": "px"
+        },
+            {
+          "type": "range",
+          "id": "border-radius",
+          "label": "Border Radius",
+          "min": 0,
+          "max": 25,
+          "step": 1,
+          "default": 1,
+          "unit": "px"
+        },
       {
+        "type": "header",
+        "content": "Layout"
+      },
+          {
         "type": "range",
         "id": "max_width",
         "label": "Maximum width",
@@ -98,25 +211,6 @@ Last editted - 26Jan24
         "step": 10,
         "default": 800,
         "unit": "px"
-      },
-      {
-        "type": "header",
-        "content": "Cart Message"
-      },
-      {
-        "type": "text",
-        "id": "cart-message-title",
-        "label": "Title"
-      },
-      {
-        "type": "richtext",
-        "id": "cart-message-text",
-        "label": "text",
-        "default": "<p><\/p>"
-      },
-      {
-        "type": "header",
-        "content": "Layout"
       },
       {
         "type": "select",
@@ -197,5 +291,4 @@ Last editted - 26Jan24
     "cart"
   ]
 }
-
 {% endschema %}
