@@ -1,14 +1,10 @@
 {% comment %}
 
-  Code created by JadePuma
-  Last editted - 6/24/24
+Code created by JadePuma
+Last editted - 7/25/24
 {% endcomment %}
 
-<script
-  type="application/json"
-  data-section-type="cart-message"
-  data-section-id="{{ section.id }}"
-></script>
+<script type="application/json" data-section-type="cart-message" data-section-id="{{ section.id }}"></script>
 
 {% comment %} Advanced {% endcomment %}
 {%- assign css_class = section.settings.css_class -%}
@@ -16,279 +12,281 @@
 
 {% comment %} Section specific CSS {% endcomment %}
 {% style %}
-    #shopify-section-{{ section.id }} {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-      padding-left: {{ section.settings.padding_left }}px;
-      padding-right: {{ section.settings.padding_right }}px;
-      {% if section.settings.width == 'half' %}
-        width: 50%;
-      {% endif %}
-    }
+#shopify-section-{{ section.id }} {
+padding-top: {{ section.settings.padding_top }}px;
+padding-bottom: {{ section.settings.padding_bottom }}px;
+padding-left: {{ section.settings.padding_left }}px;
+padding-right: {{ section.settings.padding_right }}px;
+{% if section.settings.width == 'half' %}
+width: 50%;
+{% endif %}
+}
 
-    {%
-      render 'css-loop',
-      css: custom_css,
-      id: id
-    %}
+{%
+render 'css-loop',
+css: custom_css,
+id: id
+%}
 
-  .cart-message {
-    padding: 20px;
-    text-align: center;
-    margin: 0 auto;
-    max-width: {{ section.settings.max_width }}px;
-    border: {{ section.settings.border-thickness }}px {{ section.settings.border-type }} {{ section.settings.cart-border }};
-    border-radius: {{ section.settings.border-radius }}px;
-    background-color: {{ section.settings.cart-background }};
+.cart-message {
+padding: 20px;
+text-align: center;
+margin: 0 auto;
+max-width: {{ section.settings.max_width }}px;
+border: {{ section.settings.border-thickness }}px {{ section.settings.border-type }} {{ section.settings.cart-border }};
+border-radius: {{ section.settings.border-radius }}px;
+background-color: {{ section.settings.cart-background }};
 
-  }
+}
 
-    .cart-message p, .cart-message h2, .cart-message h3{
-    color:{{section.settings.body-color}};
+.cart-message p, .cart-message h2, .cart-message h3{
+color:{{section.settings.body-color}};
 
-    }
+}
 
-  @media (max-width: 768px) {
-    .cart-message {
-    width: 90%;
-    }
-  }
+@media (max-width: 768px) {
+.cart-message {
+width: 90%;
+}
+}
 {% endstyle %}
 
 {% if section.settings['cart-message-title'] != blank or section.settings['cart-message-text'] != blank %}
-  <section
-    class="
+<section class="
       section {{ css_class }}
       is-width-{{ section.settings.width }}
-    "
-  >
-    <div class="container">
-      <div class="one-whole column content">
-        <div class="cart-message">
-          {% if section.settings['font-size'] == 'h2' %}
-            <h2>{{ section.settings['cart-message-title'] }}</h2>
+    ">
+  <div class="container">
+    <div class="one-whole column content">
+      <div class="cart-message">
+        {% if section.settings['font-size'] == 'h2' %}
+        <h2>{{ section.settings['cart-message-title'] }}</h2>
 
-          {% else %}
-            <h3>{{ section.settings['cart-message-title'] }}</h3>
-          {% endif %}
+        {% else %}
+        <h3>{{ section.settings['cart-message-title'] }}</h3>
+        {% endif %}
 
-          {{ section.settings['cart-message-text'] }}
-        </div>
+        {{ section.settings['cart-message-text'] }}
       </div>
     </div>
-  </section>
+  </div>
+</section>
 {% endif %}
 
 {% schema %}
 {
-  "name": "JP Cart message",
-  "class": "shopify-section--cart-message",
-  "settings": [
-      {
-        "type": "header",
-        "content": "Message Settings"
-      },
-      {
-        "type": "text",
-        "id": "cart-message-title",
-        "label": "Title"
-      },
-            {
-          "type": "select",
-          "id": "font-size",
-          "label": "Title Font Size",
-          "default": "h2",
-          "options": [
-            {
-              "value": "h2",
-              "label": "H2"
-            },
-            {
-              "value": "h3",
-              "label": "H3"
-            }
-          ]
-        },
-      {
-        "type": "richtext",
-        "id": "cart-message-text",
-        "label": "text",
-        "default": "<p><\/p>"
-      },
-            {
-          "type": "color",
-          "id": "body-color",
-          "label": "Text Color"
-        },
-        {
-          "type": "color",
-          "id": "cart-background",
-          "label": "Background Color"
-        },
-    {
-          "type": "header",
-          "content": "Border"
-        },
-        {
-          "type": "select",
-          "id": "border-type",
-          "label": "Border Type",
-          "default": "solid",
-          "options": [
-            {
-              "value": "solid",
-              "label": "Solid"
-            },
-            {
-              "value": "dotted",
-              "label": "Dotted"
-            },
-            {
-              "value": "dashed",
-              "label": "Dashed"
-            },
-            {
-              "value": "inset",
-              "label": "Inset"
-            },
-            {
-              "value": "outset",
-              "label": "Outset"
-            },
-            {
-              "value": "double",
-              "label": "Double"
-            },
-            {
-              "value": "groove",
-              "label": "Groove"
-            },
-            {
-              "value": "ridge",
-              "label": "Ridge"
-            },
-            {
-              "value": "none",
-              "label": "None"
-            }
-          ]
-        },
-        {
-          "type": "color",
-          "id": "cart-border",
-          "label": "Border Color"
-        },
-        {
-          "type": "range",
-          "id": "border-thickness",
-          "label": "Border Thickness",
-          "min": 0,
-          "max": 8,
-          "step": 1,
-          "default": 1,
-          "unit": "px"
-        },
-            {
-          "type": "range",
-          "id": "border-radius",
-          "label": "Border Radius",
-          "min": 0,
-          "max": 25,
-          "step": 1,
-          "default": 1,
-          "unit": "px"
-        },
-      {
-        "type": "header",
-        "content": "Layout"
-      },
-          {
-        "type": "range",
-        "id": "max_width",
-        "label": "Maximum width",
-        "min": 400,
-        "max": 1200,
-        "step": 10,
-        "default": 800,
-        "unit": "px"
-      },
-      {
-        "type": "select",
-        "id": "width",
-        "label": "Width",
-        "default": "standard",
-        "options": [
-          {
-            "value": "half",
-            "label": "Half"
-          },
-          {
-            "value": "standard",
-            "label": "Standard"
-          }
-        ]
-      },
-      {
-        "type": "range",
-        "id": "padding_top",
-        "label": "Top spacing",
-        "min": 0,
-        "max": 80,
-        "default": 20,
-        "unit": "px"
-      },
-      {
-        "type": "range",
-        "id": "padding_bottom",
-        "label": "Bottom spacing",
-        "min": 0,
-        "max": 80,
-        "default": 0,
-        "unit": "px"
-      },
-      {
-        "type": "range",
-        "id": "padding_left",
-        "label": "Left spacing",
-        "min": 0,
-        "max": 80,
-        "default": 0,
-        "unit": "px"
-      },
-      {
-        "type": "range",
-        "id": "padding_right",
-        "label": "Right spacing",
-        "default": 0,
-        "min": 0,
-        "max": 80,
-        "unit": "px"
-      },
-    {
-      "type": "header",
-      "content": "Advanced"
+"name": "JP Cart message",
+"class": "shopify-section--cart-message",
+"settings": [
+{
+"type": "header",
+"content": "Message Settings"
+},
+{
+"type": "text",
+"id": "cart-message-title",
+"label": "Title"
+},
+{
+"type": "select",
+"id": "font-size",
+"label": "Title Font Size",
+"default": "h2",
+"options": [
+{
+"value": "h2",
+"label": "H2"
+},
+{
+"value": "h3",
+"label": "H3"
+}
+]
+},
+{
+"type": "richtext",
+"id": "cart-message-text",
+"label": "Message Text",
+"default": "<p>
+  <\ /p>"
     },
     {
-      "type": "paragraph",
-      "content": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360022329373)"
+    "type": "color",
+    "id": "body-color",
+    "label": "Text Color"
     },
     {
-      "type": "text",
-      "id": "css_class",
-      "label": "CSS Class"
+    "type": "color",
+    "id": "cart-background",
+    "label": "Background Color"
     },
     {
-      "type": "textarea",
-      "id": "custom_css",
-      "label": "Custom CSS"
+    "type": "header",
+    "content": "Border"
+    },
+    {
+    "type": "select",
+    "id": "border-type",
+    "label": "Border Type",
+    "default": "solid",
+    "options": [
+    {
+    "value": "solid",
+    "label": "Solid"
+    },
+    {
+    "value": "dotted",
+    "label": "Dotted"
+    },
+    {
+    "value": "dashed",
+    "label": "Dashed"
+    },
+    {
+    "value": "inset",
+    "label": "Inset"
+    },
+    {
+    "value": "outset",
+    "label": "Outset"
+    },
+    {
+    "value": "double",
+    "label": "Double"
+    },
+    {
+    "value": "groove",
+    "label": "Groove"
+    },
+    {
+    "value": "ridge",
+    "label": "Ridge"
+    },
+    {
+    "value": "none",
+    "label": "None"
     }
-  ],
-  "presets": [{
+    ]
+    },
+    {
+    "type": "color",
+    "id": "cart-border",
+    "label": "Border Color"
+    },
+    {
+    "type": "range",
+    "id": "border-thickness",
+    "label": "Border Thickness",
+    "min": 0,
+    "max": 8,
+    "step": 1,
+    "default": 1,
+    "unit": "px"
+    },
+    {
+    "type": "range",
+    "id": "border-radius",
+    "label": "Border Radius",
+    "min": 0,
+    "max": 25,
+    "step": 1,
+    "default": 1,
+    "unit": "px"
+    },
+    {
+    "type": "header",
+    "content": "Layout"
+    },
+    {
+    "type": "range",
+    "id": "max_width",
+    "label": "Maximum width",
+    "min": 400,
+    "max": 1200,
+    "step": 10,
+    "default": 800,
+    "unit": "px"
+    },
+    {
+    "type": "select",
+    "id": "width",
+    "label": "Width",
+    "default": "standard",
+    "options": [
+    {
+    "value": "half",
+    "label": "Half"
+    },
+    {
+    "value": "standard",
+    "label": "Standard"
+    }
+    ]
+    },
+    {
+    "type": "range",
+    "id": "padding_top",
+    "label": "Top spacing",
+    "min": 0,
+    "max": 80,
+    "default": 20,
+    "unit": "px"
+    },
+    {
+    "type": "range",
+    "id": "padding_bottom",
+    "label": "Bottom spacing",
+    "min": 0,
+    "max": 80,
+    "default": 20,
+    "unit": "px"
+    },
+    {
+    "type": "range",
+    "id": "padding_left",
+    "label": "Left spacing",
+    "min": 0,
+    "max": 80,
+    "default": 0,
+    "unit": "px"
+    },
+    {
+    "type": "range",
+    "id": "padding_right",
+    "label": "Right spacing",
+    "default": 0,
+    "min": 0,
+    "max": 80,
+    "unit": "px"
+    },
+    {
+    "type": "header",
+    "content": "Advanced"
+    },
+    {
+    "type": "paragraph",
+    "content": "[Learn more](https://help.outofthesandbox.com/hc/en-us/articles/360022329373)"
+    },
+    {
+    "type": "text",
+    "id": "css_class",
+    "label": "CSS Class"
+    },
+    {
+    "type": "textarea",
+    "id": "custom_css",
+    "label": "Custom CSS"
+    }
+    ],
+    "presets": [{
     "name": "JP Cart message",
     "category": "JadePuma"
-  }],
-  "templates": [
+    }],
+    "enabled_on": {
+    "templates": [
     "cart"
-  ]
-}
-{% endschema %}
+    ]
+    }
+
+    }
+    {% endschema %}
