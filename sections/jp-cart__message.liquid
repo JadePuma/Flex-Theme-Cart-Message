@@ -92,15 +92,15 @@ width: 90%;
     }
 
       function cart_msg_startPolling(element, threshold) {
-        getCartSubtotal().then(lastSubtotal => {
-          setInterval(async () => {
-              getCartSubtotal().then(currentSubtotal => {
-                if (currentSubtotal !== lastSubtotal) {
-                  lastSubtotal = currentSubtotal;
-                  cart_msg_handleDisplayMessage(element, threshold, currentSubtotal);
-                }
+        Promise.resolve(getCartSubtotal()).then(lastSubtotal => {
+          setInterval(() => {
+            Promise.resolve(getCartSubtotal()).then(currentSubtotal => {
+              if (currentSubtotal !== lastSubtotal) {
+                lastSubtotal = currentSubtotal;
+                cart_msg_handleDisplayMessage(element, threshold, currentSubtotal);
+              }
             });
-          }, 1000); // Check every second (1000 milliseconds)
+          }, 1000);
         });
     }
 
@@ -118,7 +118,7 @@ width: 90%;
 
       const element = document.getElementById("shopify-section-{{ section.id }}")
         {% if section.settings.display_if_threshold and section.settings.cart_threshold != 0 %}
-          getCartSubtotal().then(subtotal => {
+          Promise.resolve(getCartSubtotal()).then(subtotal => {
             const threshold = {{ section.settings.cart_threshold }};
             cart_msg_handleDisplayMessage(element, threshold, subtotal);
             cart_msg_startPolling(element, threshold);
