@@ -21,15 +21,14 @@ padding-right: {{ section.settings.padding_right }}px;
 {% if section.settings.width == 'half' %}
 width: 50%;
 {% endif %}
-}
+
 
   {% if section.settings.display_if_threshold %}
-    #shopify-section-{{ section.id }} {
       display:none;
   
-    }
 
     {% endif %}
+    }
 
 {%
 render 'css-loop',
@@ -83,8 +82,7 @@ width: 90%;
 {% endif %}
 
   <script>
-
-        // Function to get the current cart subtotal from the DOM
+     //Function to get the current cart subtotal from the DOM
     function getCartSubtotal() {
       const subtotalElement = document.querySelector('.cart__subtotal .money');
       if (subtotalElement) {
@@ -93,22 +91,22 @@ width: 90%;
       return 0;
     }
 
-        function startPolling(element, threshold) {
-      let lastSubtotal = getCartSubtotal();
-      setInterval(async () => {
-        const currentSubtotal = getCartSubtotal();
-        if (currentSubtotal !== lastSubtotal) {
-          console.log('Subtotal changed:', lastSubtotal, '->', currentSubtotal);
-          lastSubtotal = currentSubtotal;
-          handleDisplayMessage(element, threshold, currentSubtotal);
-        }
-      }, 1000); // Check every second (1000 milliseconds)
+      function cart_msg_startPolling(element, threshold) {
+        getCartSubtotal().then(lastSubtotal => {
+          setInterval(async () => {
+              getCartSubtotal().then(currentSubtotal => {
+                if (currentSubtotal !== lastSubtotal) {
+                  lastSubtotal = currentSubtotal;
+                  cart_msg_handleDisplayMessage(element, threshold, currentSubtotal);
+                }
+            });
+          }, 1000); // Check every second (1000 milliseconds)
+        });
     }
 
-    function handleDisplayMessage(el, threshold, subtotal){
-      console.log("handleDisplayMessage", subtotal < threshold, threshold, subtotal)
-            if(subtotal < threshold){
-              console.log(subtotal < threshold)
+    function cart_msg_handleDisplayMessage(el, threshold, subtotal){
+      if(!el) return;
+            if(subtotal === 0 || subtotal < threshold){
               el.style.display = "none"; 
           } else {
               el.style.display = "block";    
@@ -119,14 +117,13 @@ width: 90%;
     document.addEventListener('DOMContentLoaded', function() {
 
       const element = document.getElementById("shopify-section-{{ section.id }}")
-
         {% if section.settings.display_if_threshold and section.settings.cart_threshold != 0 %}
-          const subtotal = getCartSubtotal();
-          const threshold = {{ section.settings.cart_threshold }};
-          handleDisplayMessage(element, threshold, subtotal);
-
-          startPolling(element, threshold);
-          {% else %}
+          getCartSubtotal().then(subtotal => {
+            const threshold = {{ section.settings.cart_threshold }};
+            cart_msg_handleDisplayMessage(element, threshold, subtotal);
+            cart_msg_startPolling(element, threshold);
+          });
+        {% else %}
           element.style.display = 'block';
         {% endif %}
     });
